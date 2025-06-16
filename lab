@@ -2,22 +2,23 @@ import requests
 import json
 
 while True:
-    command = input("Введите запрос (или 'выход' для завершения работы): ")
-    if command.lower() == "выход":
-        print("Завершение")
+    base_url = ('http://www.omdbapi.com/?apikey=505480d7&s=')
+    command = input("Введите название или "выход" чтобы выйти): ")
+    
+    if command.lower() == "выход": 
+        print("Пока!")
         break
-    print(f"Вы выбрали: {command}")
-    base_url = "https://api.example.com/search"
-    query = "python"
-    full_url = f"{base_url}?q={query}"
-
-ask = requests.get()
-data = ask.json()
-
-if ask.status_code == 200:
-    for movie in data:
-        print(f"🎬 {movie['Title']} ({movie['Year']})")
-elif ask.status_code == 404:
-    print("Не найдено")
-else:
-    print('Ошибка:', ask.status_code)
+    else:
+        print(f"Вы выбрали: {command}") 
+        full_url = requests.get(f"{base_url}{command}") 
+        data = full_url.json()
+        if full_url.status_code == 404: 
+            print("Ошибка 404")
+        elif full_url.status_code == 200: 
+            print("Успешно:")
+        try:
+            
+           for movie in data.get("Поиск"):
+                print(f"🎬 {movie['Title']} ({movie['Year']})")
+        except Exception as e:
+            print(f"Фильм не найден: {e}") 
